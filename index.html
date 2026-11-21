@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pisang Sale Kita</title>
+
+  <style>
+    /* =========================================================
+       1. WARNA & DASAR
+       ========================================================= */
+    :root {
+      --coklat: #70421f;
+      --coklat-muda: #a8651f;
+      --cream: #fff8ed;
+      --teks: #382719;
+      --abu: #82776c;
+      --garis: #eadcc9;
+      --merah: #b73535;
+      --bayangan: 0 8px 25px rgba(80, 48, 20, .08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: var(--cream); color: var(--teks); }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    /* =========================================================
+       2. KERANGKA HALAMAN (menu samping + isi)
+       ========================================================= */
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar { width: 245px; background: var(--coklat); color: #fff; padding: 28px 20px; position: fixed; inset: 0 auto 0 0; }
+    .brand { font-size: 23px; font-weight: bold; margin-bottom: 8px; }
+    .brand-sub { color: #f1d9bd; font-size: 13px; line-height: 1.5; margin-bottom: 38px; }
+    .nav-title { font-size: 11px; color: #dfc4a4; margin-bottom: 12px; letter-spacing: 1px; }
+    .nav-btn { width: 100%; border: 0; background: transparent; color: #fff; text-align: left; padding: 13px 14px; border-radius: 9px; margin-bottom: 7px; font-size: 14px; }
+    .nav-btn:hover, .nav-btn.active { background: #95602f; }
+    .sidebar-note { position: absolute; bottom: 25px; left: 20px; right: 20px; color: #f1d9bd; font-size: 12px; line-height: 1.6; }
+
+    .main { margin-left: 245px; width: calc(100% - 245px); padding: 30px 38px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 28px; }
+    .topbar h1 { font-size: 25px; }
+    .topbar p { font-size: 13px; color: var(--abu); margin-top: 6px; }
+    .cart-count { background: var(--coklat); color: #fff; padding: 11px 17px; border-radius: 30px; font-size: 13px; }
+
+    /* =========================================================
+       3. BANNER & JUDUL BAGIAN
+       ========================================================= */
+    .hero { background: linear-gradient(120deg, #70421f, #a96d34); color: #fff; border-radius: 17px; padding: 35px; margin-bottom: 28px; box-shadow: var(--bayangan); }
+    .hero small { color: #f5dabb; letter-spacing: 1px; font-weight: bold; }
+    .hero h2 { font-size: 30px; margin: 13px 0; max-width: 550px; line-height: 1.25; }
+    .hero p { max-width: 570px; color: #f8e8d6; line-height: 1.7; font-size: 14px; }
+
+    .section-head { display: flex; justify-content: space-between; align-items: center; margin: 28px 0 17px; gap: 12px; }
+    .section-head h2 { font-size: 21px; }
+    .section-head p { color: var(--abu); font-size: 13px; margin-top: 5px; }
+
+    /* =========================================================
+       4. PRODUK
+       ========================================================= */
+    .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .product-grid.single { grid-template-columns: 1fr; }
+
+    .product-card { background: #fff; border: 1px solid var(--garis); border-radius: 14px; overflow: hidden; box-shadow: var(--bayangan); }
+    .product-picture { height: 155px; display: flex; align-items: center; justify-content: center; font-size: 65px; background: #f5e5d0; }
+    .product-content { padding: 17px; }
+    .product-label { display: inline-block; background: #fff0d8; color: #8a4f16; padding: 5px 9px; border-radius: 20px; font-size: 11px; margin-bottom: 10px; }
+    .product-content h3 { font-size: 17px; margin-bottom: 8px; }
+    .product-desc { color: var(--abu); font-size: 13px; line-height: 1.5; min-height: 40px; }
+    .price { color: var(--coklat); font-weight: bold; font-size: 18px; margin: 14px 0; }
+    .price small { font-size: 13px; color: var(--abu); font-weight: normal; }
+
+    .featured { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+    .featured .product-picture { height: auto; min-height: 320px; font-size: 120px; }
+    .featured .product-content { padding: 32px; }
+    .featured h3 { font-size: 26px; }
+    .featured .product-desc { font-size: 15px; line-height: 1.7; }
+    .featured .price { font-size: 30px; }
+
+    /* =========================================================
+       5. KEUNGGULAN & CARA PESAN
+       ========================================================= */
+    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .feature { background: #fff; border: 1px solid var(--garis); border-radius: 14px; padding: 22px; box-shadow: var(--bayangan); }
+    .feature .ic { font-size: 34px; margin-bottom: 10px; }
+    .feature h3 { font-size: 16px; margin-bottom: 7px; }
+    .feature p { font-size: 13px; color: var(--abu); line-height: 1.6; }
+
+    .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .step { display: flex; gap: 13px; align-items: flex-start; font-size: 13px; line-height: 1.6; color: var(--abu); }
+    .step b { color: var(--teks); display: block; font-size: 15px; }
+    .step span { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--coklat); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+    /* =========================================================
+       6. TOMBOL & KOTAK
+       ========================================================= */
+    .btn { border: 0; border-radius: 9px; padding: 11px 15px; font-weight: bold; font-size: 13px; }
+    .btn-primary { background: var(--coklat); color: #fff; }
+    .btn-primary:hover { background: #543016; }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-light { background: #f5eadc; color: var(--coklat); }
+    .btn-danger { background: #fae7e5; color: var(--merah); }
+    .btn-block { width: 100%; }
+
+    .panel { background: #fff; border: 1px solid var(--garis); border-radius: 14px; padding: 22px; box-shadow: var(--bayangan); }
+    .empty { text-align: center; color: var(--abu); padding: 45px 15px; line-height: 1.7; }
+    .loading { text-align: center; padding: 35px; color: var(--abu); }
+
+    /* =========================================================
+       7. KERANJANG (BANYAK PESANAN TERPISAH)
+       ========================================================= */
+    .cart-row { display: flex; justify-content: space-between; align-items: center; gap: 15px; padding: 17px 0; border-bottom: 1px solid var(--garis); }
+    .cart-row:last-child { border-bottom: 0; }
+    .cart-row h3 { font-size: 15px; margin-bottom: 6px; }
+    .cart-row p { font-size: 13px; color: var(--abu); }
+    .qty-control { display: flex; align-items: center; gap: 9px; }
+    .qty-control button { width: 29px; height: 29px; border: 1px solid var(--garis); background: var(--cream); border-radius: 7px; }
+    .qty-control .btn { width: auto; padding: 0 12px; }
+    .total-row { display: flex; justify-content: space-between; padding: 20px 0; font-weight: bold; font-size: 18px; }
+
+    .order-panel { margin-bottom: 18px; }
+    .order-panel.aktif { border-color: var(--coklat-muda); box-shadow: 0 0 0 2px #f1d9bd, var(--bayangan); }
+    .order-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+    .order-head .label-input { flex: 1; min-width: 180px; border: 1px solid var(--garis); border-radius: 9px; padding: 10px 12px; font-weight: bold; outline: none; background: #fff; }
+    .order-head .label-input:focus { border-color: var(--coklat-muda); }
+    .badge-aktif { background: #fff0d8; color: #8a4f16; padding: 6px 11px; border-radius: 20px; font-size: 12px; font-weight: bold; white-space: nowrap; }
+    .order-note { font-size: 13px; color: var(--abu); line-height: 1.6; margin-bottom: 18px; }
+    .order-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .order-actions .btn-primary { flex: 1; min-width: 200px; }
+    .order-empty { color: var(--abu); font-size: 13px; padding: 18px 0; }
+
+    .order-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: #fff; border: 1px solid var(--garis); border-radius: 12px; padding: 12px 15px; margin-bottom: 18px; font-size: 13px; }
+    .order-bar select { border: 1px solid var(--garis); border-radius: 9px; padding: 9px 10px; background: #fff; max-width: 100%; }
+
+    /* =========================================================
+       8. FORMULIR PEMESANAN
+       ========================================================= */
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; }
+    .field { margin-bottom: 17px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+    .field input, .field textarea, .field select { width: 100%; border: 1px solid var(--garis); border-radius: 9px; padding: 12px; outline: none; background: #fff; }
+    .field input:focus, .field textarea:focus { border-color: var(--coklat-muda); }
+    .field textarea { min-height: 90px; resize: vertical; }
+    .radio-box { display: flex; gap: 12px; flex-wrap: wrap; }
+    .radio-option { border: 1px solid var(--garis); padding: 13px; border-radius: 9px; font-size: 13px; flex: 1; min-width: 140px; }
+    .radio-option input { width: auto; margin-right: 6px; }
+    .notice { background: #fff4df; color: #805019; border-radius: 9px; padding: 13px; font-size: 13px; line-height: 1.5; margin-bottom: 17px; }
+    .error-text { color: var(--merah); font-size: 13px; margin: 10px 0; }
+
+    /* =========================================================
+       9. HALAMAN BERHASIL & NOTIFIKASI
+       ========================================================= */
+    .success { text-align: center; padding: 35px 15px; }
+    .success-icon { font-size: 55px; margin-bottom: 15px; display: inline-block; animation: popIn .6s cubic-bezier(.2, 1.6, .4, 1) both; }
+    .success h2 { margin-bottom: 10px; }
+    .success p { color: var(--abu); line-height: 1.7; margin-bottom: 15px; }
+    .order-code { display: inline-block; background: #f5eadc; color: var(--coklat); padding: 12px 20px; border-radius: 9px; font-weight: bold; margin: 10px 0 20px; }
+    .success-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .toast { position: fixed; right: 25px; bottom: 25px; background: #382719; color: #fff; padding: 14px 18px; border-radius: 10px; font-size: 13px; box-shadow: var(--bayangan); display: none; z-index: 20; }
+    .toast.show { display: block; }
+
+    /* =========================================================
+       10. TAMPILAN TABLET & HP
+       ========================================================= */
+    @media (max-width: 1000px) {
+      .product-grid:not(.single) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 700px) {
+      .layout { display: block; }
+      .sidebar { width: 100%; height: auto; position: relative; padding: 16px; }
+      .brand { margin-bottom: 12px; }
+      .brand-sub, .sidebar-note, .nav-title { display: none; }
+      .nav-btn { width: auto; display: inline-block; margin: 0 4px 0 0; padding: 10px; }
+      .main { margin-left: 0; width: 100%; padding: 20px 15px; }
+      .topbar h1 { font-size: 21px; }
+      .hero { padding: 25px; }
+      .hero h2 { font-size: 24px; }
+      .product-grid, .form-grid, .feature-grid, .steps, .featured { grid-template-columns: 1fr; }
+      .featured .product-picture { min-height: 200px; font-size: 90px; }
+      .featured .product-content { padding: 22px; }
+      .field.full { grid-column: auto; }
+      .cart-row { align-items: flex-start; flex-direction: column; }
+    }
+
+    /* =========================================================
+       11. MASKOT: boneka memegang pisang sale
+       ========================================================= */
+    .featured .product-picture { background: linear-gradient(160deg, #ffeab0, #ffd36a) !important; }
+    .mk-svg { width: min(100%, 320px); height: auto; overflow: visible; }
+
+    .mk-badan  { animation: mkGoyang 2.8s ease-in-out infinite;  transform-box: view-box; transform-origin: 120px 240px; }
+    .mk-shadow { animation: mkBayang 2.8s ease-in-out infinite;  transform-box: fill-box; transform-origin: center; }
+    .mk-lambai { animation: mkLambai 1.4s ease-in-out infinite;  transform-box: view-box; transform-origin: 80px 152px; }
+    .mk-pisang { animation: mkPisang 2.8s ease-in-out infinite;  transform-box: view-box; transform-origin: 193px 140px; }
+    .mk-mata   { animation: mkKedip 4s infinite;                 transform-box: fill-box; transform-origin: center; }
+    .mk-bubble { animation: mkMuncul 3.2s ease-in-out infinite;  transform-box: fill-box; transform-origin: 50% 100%; }
+    .mk-kilau  { animation: mkBerkilau 2s ease-in-out infinite; }
+
+    @keyframes mkGoyang   { 0%,100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-9px) rotate(1.5deg); } }
+    @keyframes mkBayang   { 0%,100% { transform: scale(1); opacity: .13; } 50% { transform: scale(.88); opacity: .08; } }
+    @keyframes mkLambai   { 0%,100% { transform: rotate(8deg); } 50% { transform: rotate(-16deg); } }
+    @keyframes mkPisang   { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(5deg); } }
+    @keyframes mkKedip    { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+    @keyframes mkMuncul   { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+    @keyframes mkBerkilau { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+
+    @media (prefers-reduced-motion: reduce) { .mk-svg * { animation: none !important; } }
+
+    /* =========================================================
+       12. DAPUR: beruang koki masak pisang sale
+       ========================================================= */
+    .dapur { margin-top: 22px; border: 1px solid var(--garis); border-radius: 18px; overflow: hidden; line-height: 0; }
+    .dp-svg { width: 100%; height: auto; display: block; }
+
+    .dp-aduk   { animation: dpAduk 1.6s ease-in-out infinite;  transform-box: view-box; transform-origin: 176px 130px; }
+    .dp-koki   { animation: dpGoyang 2.4s ease-in-out infinite; transform-box: view-box; transform-origin: 110px 130px; }
+    .dp-mata   { animation: dpKedip 4s infinite;               transform-box: fill-box; transform-origin: center; }
+    .dp-api    { animation: dpApi .45s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+    .dp-uap    { animation: dpUap 2.4s ease-in infinite;       transform-box: fill-box; }
+    .dp-iris   { animation: dpLoncat 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .dp-bubble { animation: dpDenyut 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 20% 100%; }
+
+    @keyframes dpAduk   { 0%,100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
+    @keyframes dpGoyang { 0%,100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(2deg) translateY(-3px); } }
+    @keyframes dpKedip  { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+    @keyframes dpApi    { from { transform: scaleY(.75); } to { transform: scaleY(1.15); } }
+    @keyframes dpUap    { 0% { transform: translateY(0); opacity: 0; } 30% { opacity: .75; } 100% { transform: translateY(-16px); opacity: 0; } }
+    @keyframes dpDenyut { 0%,100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+    @keyframes dpLoncat {
+      0%   { transform: translate(0, 0) scale(.6); opacity: 0; }
+      15%  { opacity: 1; }
+      50%  { transform: translate(var(--dx), -52px) rotate(180deg) scale(1); }
+      85%  { transform: translate(calc(var(--dx) * 1.6), -8px) rotate(330deg); opacity: 1; }
+      100% { transform: translate(calc(var(--dx) * 1.6), 0) rotate(360deg); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) { .dp-svg * { animation: none !important; } }
+
+    /* =========================================================
+       13. KURIR: beruang mengantar pesanan (halaman berhasil)
+       ========================================================= */
+    .kurir { margin: 8px auto 22px; max-width: 520px; border: 1px solid var(--garis); border-radius: 18px; overflow: hidden; line-height: 0; }
+    .kr-svg { width: 100%; height: auto; display: block; }
+
+    .kr-jalan  { animation: krJalan 6s linear infinite; }
+    .kr-bob    { animation: krBob .45s ease-in-out infinite alternate; }
+    .kr-roda   { animation: krRoda .55s linear infinite; transform-box: fill-box; transform-origin: center; }
+    .kr-angin  { animation: krAngin .5s ease-in-out infinite alternate; }
+    .kr-awan   { animation: krAwan 14s linear infinite; }
+    .kr-garis  { animation: krGaris .7s linear infinite; }
+    .kr-bubble { animation: krDenyut 1.8s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+
+    @keyframes krJalan  { from { transform: translateX(-175px); } to { transform: translateX(455px); } }
+    @keyframes krBob    { from { transform: translateY(0); } to { transform: translateY(-2.5px); } }
+    @keyframes krRoda   { to { transform: rotate(360deg); } }
+    @keyframes krAngin  { from { opacity: .15; transform: translateX(0); } to { opacity: .8; transform: translateX(-7px); } }
+    @keyframes krAwan   { from { transform: translateX(0); } to { transform: translateX(-120px); } }
+    @keyframes krGaris  { to { stroke-dashoffset: 40; } }
+    @keyframes krDenyut { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .kr-svg * { animation: none !important; }
+      .kr-jalan { transform: translateX(150px); }
+      .success-icon { animation: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+
+    <!-- Menu samping -->
+    <aside class="sidebar">
+      <div class="brand">🍌 Bilbie Sale</div>
+      <div class="brand-sub">Camilan tradisional, teman santai setiap hari.</div>
+      <div class="nav-title">MENU UTAMA</div>
+      <button class="nav-btn active" data-page="katalog">🏠 Beranda</button>
+      <button class="nav-btn" data-page="keranjang">🛒 Keranjang</button>
+      <button class="nav-btn" data-page="checkout">📝 Pemesanan</button>
+      <div class="sidebar-note">Terima kasih sudah mendukung produk camilan lokal.</div>
+    </aside>
+
+    <!-- Isi halaman -->
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h1 id="pageTitle">Pisang Sale Kita</h1>
+          <p id="pageSubtitle">Nikmati pisang sale pilihan untuk camilan sehari-hari.</p>
+        </div>
+        <div class="cart-count">🛒 Keranjang: <span id="cartCount">0</span></div>
+      </div>
+      <div id="app"></div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* =========================================================
+       1. PENGATURAN (bagian yang paling sering diubah)
+       ========================================================= */
+
+    // Alamat file PHP. Relatif, jadi harus dibuka lewat http://localhost/pisang-sale/
+    // Gunakan huruf kecil semua supaya aman kalau nanti dipasang di hosting.
+    const API_PRODUK = "api/produk.php";
+    const API_PESAN  = "api/pesan.php";
+
+    /* =========================================================
+       2. DATA
+       ========================================================= */
+    let PRODUK = [];            // diisi dari database
+    let produkSiap = false;     // true setelah produk berhasil dimuat
+    let pesananJadi = null;     // hasil pesanan terakhir (nama & nomor pembeli)
+    let halaman = "katalog";    // halaman yang sedang tampil
+
+    // BARU: keranjang sekarang berisi BANYAK pesanan yang terpisah.
+    // Tiap pesanan = { uid, nama, items: [{ id, qty }] }
+    let pesananList = [];       // semua pesanan yang belum dikirim
+    let aktifUid = null;        // pesanan yang sedang menerima produk baru
+    let checkoutUid = null;     // pesanan yang sedang diisi di formulir
+
+    const $ = id => document.getElementById(id);
+
+    /* =========================================================
+       3. ALAT BANTU
+       ========================================================= */
+    function rupiah(angka) {
+      return "Rp" + Number(angka || 0).toLocaleString("id-ID");
+    }
+
+    // Mencegah teks dari database/pengguna merusak tampilan halaman
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+      }[c]));
+    }
+
+    function tampilToast(pesan) {
+      const toast = $("toast");
+      toast.textContent = pesan;
+      toast.classList.add("show");
+      clearTimeout(tampilToast.t);
+      tampilToast.t = setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    function cariProduk(id) {
+      return PRODUK.find(p => Number(p.id) === Number(id));
+    }
+
+    /* =========================================================
+       4. KERANJANG: BANYAK PESANAN TERPISAH
+       Satu pesanan = satu pemesan. Produk hanya masuk ke
+       pesanan yang dipilih (aktif), jadi pesanan orang lain
+       tidak ikut tercampur.
+       ========================================================= */
+    function uidBaru() {
+      return "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    }
+
+    function pesananKosong() {
+      return { uid: uidBaru(), nama: "", items: [] };
+    }
+
+    function cariPesanan(uid) {
+      return pesananList.find(o => o.uid === uid);
+    }
+
+    function pesananAktif() {
+      return cariPesanan(aktifUid) || pesananList[0];
+    }
+
+    function namaPesanan(o) {
+      return o.nama || "Pesanan " + (pesananList.indexOf(o) + 1);
+    }
+
+    function jumlahBungkus(o) {
+      return o.items.reduce((t, i) => t + Number(i.qty || 0), 0);
+    }
+
+    function hitungTotal(o) {
+      return o.items.reduce((total, item) => {
+        const p = cariProduk(item.id);
+        return total + (p ? p.price * Number(item.qty) : 0);
+      }, 0);
+    }
+
+    function muatKeranjang() {
+      try {
+        const simpanan = JSON.parse(localStorage.getItem("ps_orders") || "null");
+        if (simpanan && Array.isArray(simpanan.list)) {
+          pesananList = simpanan.list;
+          aktifUid = simpanan.aktif;
+        } else {
+          // Pindahkan keranjang versi lama (satu keranjang) ke format baru
+          const lama = JSON.parse(localStorage.getItem("ps_cart") || "[]");
+          if (Array.isArray(lama) && lama.length) pesananList = [{ uid: uidBaru(), nama: "", items: lama }];
+        }
+      } catch (e) { pesananList = []; }
+
+      pesananList = pesananList
+        .filter(o => o && o.uid && Array.isArray(o.items))
+        .map(o => ({ uid: String(o.uid), nama: String(o.nama || ""), items: o.items.map(i => ({ id: Number(i.id), qty: Number(i.qty) })) }));
+
+      if (!pesananList.length) pesananList = [pesananKosong()];
+      if (!cariPesanan(aktifUid)) aktifUid = pesananList[0].uid;
+    }
+
+    function simpanKeranjang() {
+      try { localStorage.setItem("ps_orders", JSON.stringify({ list: pesananList, aktif: aktifUid })); } catch (e) {}
+      updateJumlahKeranjang();
+    }
+
+    function updateJumlahKeranjang() {
+      $("cartCount").textContent = pesananList.reduce((t, o) => t + jumlahBungkus(o), 0);
+    }
+
+    function tambahProduk(id, jumlah = 1, uid) {
+      if (!produkSiap || !cariProduk(id)) return;
+      const o = cariPesanan(uid) || pesananAktif();
+      const item = o.items.find(i => Number(i.id) === Number(id));
+      if (item) item.qty += jumlah;
+      else o.items.push({ id: Number(id), qty: jumlah });
+      simpanKeranjang();
+      tampilkan();
+      tampilToast("Ditambahkan ke " + namaPesanan(o) + ".");
+    }
+
+    function ubahJumlah(uid, id, perubahan) {
+      const o = cariPesanan(uid);
+      if (!o) return;
+      const item = o.items.find(i => Number(i.id) === Number(id));
+      if (!item) return;
+      item.qty += perubahan;
+      if (item.qty <= 0) o.items = o.items.filter(i => Number(i.id) !== Number(id));
+      simpanKeranjang();
+      tampilkan();
+    }
+
+    function hapusProduk(uid, id) {
+      const o = cariPesanan(uid);
+      if (!o) return;
+      o.items = o.items.filter(i => Number(i.id) !== Number(id));
+      simpanKeranjang();
+      tampilkan();
+      tampilToast("Produk dihapus dari " + namaPesanan(o) + ".");
+    }
+
+    function pesananBaru() {
+      const o = pesananKosong();
+      pesananList.push(o);
+      aktifUid = o.uid;
+      simpanKeranjang();
+      tampilkan();
+      tampilToast(namaPesanan(o) + " dibuat. Produk berikutnya masuk ke sini.");
+    }
+
+    function hapusPesanan(uid) {
+      const o = cariPesanan(uid);
+      if (!o) return;
+      pesananList = pesananList.filter(x => x.uid !== uid);
+      if (!pesananList.length) pesananList = [pesananKosong()];
+      if (!cariPesanan(aktifUid)) aktifUid = pesananList[0].uid;
+      simpanKeranjang();
+      tampilkan();
+      tampilToast("Pesanan dihapus.");
+    }
+
+    /* =========================================================
+       5. MEMUAT PRODUK DARI DATABASE
+       Kalau gagal, layar menampilkan penyebabnya.
+       ========================================================= */
+    async function muatProduk() {
+      const app = $("app");
+
+      // Dibuka langsung dari file (klik dua kali)? PHP tidak bisa jalan.
+      if (location.protocol === "file:") {
+        app.innerHTML = `
+          <div class="panel empty">
+            <h3>Buka lewat Laragon ya</h3>
+            <p>Halaman ini dibuka langsung dari file, jadi PHP dan database tidak bisa jalan.</p>
+            <p>Nyalakan Laragon (Start All), lalu buka:<br><b>http://localhost/pisang-sale/</b></p>
+          </div>`;
+        return;
+      }
+
+      app.innerHTML = '<div class="panel loading">Sedang mengambil data produk...</div>';
+
+      try {
+        const response = await fetch(API_PRODUK, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`File ${API_PRODUK} tidak bisa dibuka (kode ${response.status}). Periksa nama file dan folder api.`);
+        }
+
+        const teks = await response.text();
+        let data;
+        try { data = JSON.parse(teks); }
+        catch (e) {
+          throw new Error(`Jawaban dari ${API_PRODUK} bukan data produk. Periksa isi file PHP-nya (baris <?php di paling atas, dan tidak ada tulisan error).`);
+        }
+        if (!Array.isArray(data)) throw new Error(data.pesan || "Format data produk tidak sesuai.");
+
+        PRODUK = data.map(p => ({
+          id: Number(p.id),
+          name: p.nama,
+          price: Number(p.harga),
+          c: /^#[0-9a-fA-F]{6}$/.test(p.warna || "") ? p.warna : "#f5e5d0",
+          tag: p.label || "",
+          desc: p.deskripsi || "",
+          bahan: p.bahan || ""
+        }));
+
+        produkSiap = true;
+        // Buang produk di keranjang yang sudah tidak ada di database
+        pesananList.forEach(o => { o.items = o.items.filter(item => cariProduk(item.id)); });
+        simpanKeranjang();
+        tampilkan();
+
+      } catch (error) {
+        produkSiap = false;
+        app.innerHTML = `
+          <div class="panel empty">
+            <h3>Produk belum dapat dimuat</h3>
+            <p>${escapeHTML(error.message)}</p>
+            <p>Pastikan Laragon aktif (Apache dan MySQL menyala).</p>
+            <br>
+            <button class="btn btn-primary" data-a="retry">Coba Lagi</button>
+          </div>`;
+      }
+    }
+
+    /* =========================================================
+       6. ISI TIAP HALAMAN
+       ========================================================= */
+    function aturJudul() {
+      const judul = {
+        katalog:   ["Bilbie Sale", "Nikmati pisang sale pilihan untuk camilan sehari-hari."],
+        keranjang: ["Keranjang Belanja", "Satu pesanan untuk satu pemesan, jadi tidak tercampur."],
+        checkout:  ["Formulir Pemesanan", "Lengkapi data untuk melanjutkan pesanan."],
+        selesai:   ["Pesanan Berhasil", "Terima kasih sudah memesan Pisang Sale Kita."]
+      };
+      $("pageTitle").textContent = judul[halaman][0];
+      $("pageSubtitle").textContent = judul[halaman][1];
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.page === halaman);
+      });
+    }
+
+    function tampilkan() {
+      aturJudul();
+      updateJumlahKeranjang();
+      const isi = {
+        katalog: halamanKatalog,
+        keranjang: halamanKeranjang,
+        checkout: halamanCheckout,
+        selesai: halamanSelesai
+      };
+      $("app").innerHTML = isi[halaman]();
+    }
+
+    function bukaHalaman(nama) {
+      halaman = nama;
+      tampilkan();
+    }
+
+    // ----- Boneka beruang memegang pisang sale -----
+    function gambarMaskot() {
+      return `
+        <svg class="mk-svg" viewBox="0 0 240 260" aria-hidden="true">
+          <ellipse class="mk-shadow" cx="120" cy="246" rx="62" ry="8" fill="#000" opacity=".13"/>
+
+          <g class="mk-bubble">
+            <rect x="6" y="8" width="88" height="32" rx="16" fill="#fff"/>
+            <path d="M58 39 L72 39 L68 50 Z" fill="#fff"/>
+            <text x="50" y="29" text-anchor="middle" font-size="13" font-weight="700" fill="#70421f" font-family="Arial,sans-serif">Yuk coba!</text>
+          </g>
+
+          <g class="mk-badan">
+            <ellipse cx="88" cy="232" rx="22" ry="14" fill="#8a5a33"/>
+            <ellipse cx="152" cy="232" rx="22" ry="14" fill="#8a5a33"/>
+            <ellipse cx="88" cy="234" rx="10" ry="6" fill="#e9b88a"/>
+            <ellipse cx="152" cy="234" rx="10" ry="6" fill="#e9b88a"/>
+            <ellipse cx="120" cy="178" rx="54" ry="58" fill="#a8703f"/>
+            <ellipse cx="120" cy="188" rx="34" ry="38" fill="#f3d7b0"/>
+
+            <circle cx="78" cy="62" r="20" fill="#8a5a33"/>
+            <circle cx="162" cy="62" r="20" fill="#8a5a33"/>
+            <circle cx="78" cy="63" r="11" fill="#e9b88a"/>
+            <circle cx="162" cy="63" r="11" fill="#e9b88a"/>
+
+            <g class="mk-lambai">
+              <path d="M80 152 Q50 150 44 124" stroke="#a8703f" stroke-width="24" stroke-linecap="round" fill="none"/>
+              <circle cx="44" cy="122" r="14" fill="#a8703f"/>
+              <circle cx="44" cy="124" r="6" fill="#e9b88a"/>
+            </g>
+
+            <circle cx="120" cy="102" r="52" fill="#a8703f"/>
+            <ellipse cx="120" cy="120" rx="25" ry="19" fill="#f3d7b0"/>
+            <ellipse cx="120" cy="111" rx="7.5" ry="5.5" fill="#3a2415"/>
+            <path d="M110 123 Q120 134 130 123" stroke="#3a2415" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <g class="mk-mata">
+              <circle cx="98" cy="94" r="6" fill="#2b1d0e"/>
+              <circle cx="142" cy="94" r="6" fill="#2b1d0e"/>
+              <circle cx="100" cy="92" r="2" fill="#fff"/>
+              <circle cx="144" cy="92" r="2" fill="#fff"/>
+            </g>
+            <circle cx="82" cy="112" r="9" fill="#ff8f86" opacity=".5"/>
+            <circle cx="158" cy="112" r="9" fill="#ff8f86" opacity=".5"/>
+
+            <g class="mk-pisang">
+              <ellipse cx="198" cy="98" rx="14" ry="36" transform="rotate(16 198 98)" fill="#7a4a22" stroke="#4a2c12" stroke-width="2"/>
+              <ellipse cx="196" cy="94" rx="4" ry="24" transform="rotate(16 196 94)" fill="#b07a42" opacity=".8"/>
+              <circle cx="204" cy="76" r="2" fill="#4a2c12" opacity=".7"/>
+              <circle cx="196" cy="112" r="2" fill="#4a2c12" opacity=".7"/>
+              <path d="M160 152 Q190 156 194 130" stroke="#a8703f" stroke-width="24" stroke-linecap="round" fill="none"/>
+              <circle cx="193" cy="126" r="14" fill="#a8703f"/>
+            </g>
+          </g>
+
+          <g class="mk-kilau" fill="#fff">
+            <path d="M226 62 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+            <path d="M170 24 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z"/>
+          </g>
+        </svg>`;
+    }
+
+    // ----- Beruang koki memasak pisang sale -----
+    function gambarDapur() {
+      return `
+        <div class="dapur">
+          <svg class="dp-svg" viewBox="0 0 420 200" aria-hidden="true">
+            <defs><clipPath id="dpClip"><rect width="420" height="200" rx="18"/></clipPath></defs>
+            <g clip-path="url(#dpClip)">
+              <rect width="420" height="200" fill="#fff4df"/>
+
+              <!-- beruang koki -->
+              <g class="dp-koki">
+                <ellipse cx="110" cy="150" rx="38" ry="30" fill="#a8703f"/>
+                <ellipse cx="110" cy="154" rx="25" ry="22" fill="#fff"/>
+                <circle cx="80" cy="74" r="11" fill="#8a5a33"/>
+                <circle cx="140" cy="74" r="11" fill="#8a5a33"/>
+                <circle cx="110" cy="92" r="34" fill="#a8703f"/>
+                <ellipse cx="110" cy="104" rx="14" ry="11" fill="#f3d7b0"/>
+                <ellipse cx="110" cy="99" rx="4.5" ry="3.2" fill="#3a2415"/>
+                <path d="M104 107 Q110 113 116 107" stroke="#3a2415" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <g class="dp-mata">
+                  <circle cx="98" cy="88" r="3.8" fill="#2b1d0e"/>
+                  <circle cx="122" cy="88" r="3.8" fill="#2b1d0e"/>
+                </g>
+                <circle cx="89" cy="100" r="6" fill="#ff8f86" opacity=".5"/>
+                <circle cx="131" cy="100" r="6" fill="#ff8f86" opacity=".5"/>
+                <!-- topi koki -->
+                <rect x="88" y="50" width="44" height="14" rx="3" fill="#fff" stroke="#eadcc9"/>
+                <circle cx="95" cy="46" r="12" fill="#fff" stroke="#eadcc9"/>
+                <circle cx="110" cy="39" r="14" fill="#fff" stroke="#eadcc9"/>
+                <circle cx="125" cy="46" r="12" fill="#fff" stroke="#eadcc9"/>
+                <rect x="90" y="48" width="40" height="15" rx="3" fill="#fff"/>
+              </g>
+
+              <!-- meja dapur -->
+              <rect y="152" width="420" height="48" fill="#c98b4e"/>
+              <rect y="152" width="420" height="6" fill="#b57a40"/>
+
+              <!-- kompor + api -->
+              <rect x="210" y="152" width="104" height="48" fill="#3d3d3d"/>
+              <g>
+                <g class="dp-api"><ellipse cx="238" cy="178" rx="7" ry="11" fill="#ff9f1c"/><ellipse cx="238" cy="182" rx="3.5" ry="6" fill="#ffe066"/></g>
+                <g class="dp-api" style="animation-delay:-.2s"><ellipse cx="262" cy="178" rx="7" ry="11" fill="#ff9f1c"/><ellipse cx="262" cy="182" rx="3.5" ry="6" fill="#ffe066"/></g>
+                <g class="dp-api" style="animation-delay:-.35s"><ellipse cx="286" cy="178" rx="7" ry="11" fill="#ff9f1c"/><ellipse cx="286" cy="182" rx="3.5" ry="6" fill="#ffe066"/></g>
+              </g>
+
+              <!-- uap -->
+              <g fill="none" stroke="#cdbba2" stroke-width="3" stroke-linecap="round">
+                <path class="dp-uap" d="M248 96 q-6 -9 0 -18 q6 -9 0 -18"/>
+                <path class="dp-uap" style="animation-delay:-.8s" d="M264 96 q-6 -9 0 -18 q6 -9 0 -18"/>
+                <path class="dp-uap" style="animation-delay:-1.6s" d="M280 96 q-6 -9 0 -18 q6 -9 0 -18"/>
+              </g>
+
+              <!-- irisan pisang meloncat -->
+              <g fill="#ffd166" stroke="#e0a526" stroke-width="1.5">
+                <circle class="dp-iris" style="--dx:-12px" cx="246" cy="110" r="7"/>
+                <circle class="dp-iris" style="--dx:2px;animation-delay:-.8s" cx="262" cy="110" r="7"/>
+                <circle class="dp-iris" style="--dx:14px;animation-delay:-1.6s" cx="278" cy="110" r="7"/>
+              </g>
+
+              <!-- panci -->
+              <rect x="298" y="116" width="26" height="7" rx="3.5" fill="#3a3a3a"/>
+              <path d="M220 112 H304 V138 Q304 152 290 152 H234 Q220 152 220 138 Z" fill="#5a5a5a"/>
+              <ellipse cx="262" cy="112" rx="42" ry="7" fill="#3a3a3a"/>
+              <ellipse cx="262" cy="113" rx="36" ry="5" fill="#f2c14e"/>
+
+              <!-- tangan mengaduk -->
+              <path d="M146 138 L176 130" stroke="#a8703f" stroke-width="15" stroke-linecap="round"/>
+              <g class="dp-aduk">
+                <path d="M176 130 L236 108" stroke="#a8703f" stroke-width="15" stroke-linecap="round"/>
+                <circle cx="238" cy="107" r="9" fill="#a8703f"/>
+                <line x1="238" y1="107" x2="262" y2="125" stroke="#8a5a33" stroke-width="4" stroke-linecap="round"/>
+                <ellipse cx="265" cy="128" rx="7" ry="4.5" transform="rotate(40 265 128)" fill="#8a5a33"/>
+              </g>
+
+              <!-- balon ucapan -->
+              <g class="dp-bubble">
+                <rect x="292" y="14" width="114" height="32" rx="16" fill="#fff" stroke="#eadcc9"/>
+                <path d="M308 45 L322 45 L314 58 Z" fill="#fff"/>
+                <text x="349" y="35" text-anchor="middle" font-size="13" font-weight="700" fill="#70421f" font-family="Arial,sans-serif">Wangi banget!</text>
+              </g>
+            </g>
+          </svg>
+        </div>`;
+    }
+
+    // ----- BARU: Beruang kurir mengantar pesanan -----
+    function gambarKurir() {
+      return `
+        <div class="kurir">
+          <svg class="kr-svg" viewBox="0 0 420 200" role="img" aria-label="Beruang kurir mengantar pesanan pisang sale">
+            <rect width="420" height="200" fill="#ffeab0"/>
+
+            <!-- awan bergerak -->
+            <g class="kr-awan" fill="#fff" opacity=".85">
+              <ellipse cx="70" cy="58" rx="26" ry="10"/><ellipse cx="88" cy="52" rx="16" ry="9"/>
+              <ellipse cx="250" cy="76" rx="24" ry="9"/><ellipse cx="266" cy="70" rx="14" ry="8"/>
+              <ellipse cx="400" cy="54" rx="26" ry="10"/><ellipse cx="418" cy="48" rx="16" ry="9"/>
+            </g>
+
+            <!-- rumah tujuan -->
+            <g>
+              <rect x="338" y="96" width="62" height="58" fill="#f6d9a8"/>
+              <path d="M330 98 L369 66 L408 98 Z" fill="#b73535"/>
+              <rect x="358" y="120" width="22" height="34" rx="3" fill="#8a5a33"/>
+              <rect x="346" y="106" width="12" height="12" fill="#bfe3f5"/>
+            </g>
+
+            <!-- jalan -->
+            <rect y="158" width="420" height="42" fill="#6b6b6b"/>
+            <line class="kr-garis" x1="0" y1="180" x2="420" y2="180" stroke="#fff" stroke-width="3" stroke-dasharray="22 18"/>
+
+            <!-- balon ucapan -->
+            <g class="kr-bubble">
+              <rect x="120" y="12" width="180" height="30" rx="15" fill="#fff" stroke="#eadcc9"/>
+              <text x="210" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#70421f" font-family="Arial,sans-serif">Segera kami antar!</text>
+            </g>
+
+            <!-- kurir melaju -->
+            <g class="kr-jalan">
+              <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+                <line class="kr-angin" x1="12" y1="96" x2="32" y2="96"/>
+                <line class="kr-angin" style="animation-delay:-.2s" x1="4" y1="112" x2="28" y2="112"/>
+                <line class="kr-angin" style="animation-delay:-.35s" x1="14" y1="128" x2="34" y2="128"/>
+              </g>
+
+              <g class="kr-bob">
+                <!-- kotak pisang sale -->
+                <rect x="36" y="88" width="40" height="32" rx="4" fill="#e9c58f" stroke="#b58650" stroke-width="2"/>
+                <line x1="36" y1="102" x2="76" y2="102" stroke="#b58650" stroke-width="2"/>
+                <text x="56" y="117" text-anchor="middle" font-size="14">🍌</text>
+
+                <!-- badan motor -->
+                <rect x="48" y="118" width="36" height="18" rx="8" fill="#d9534f"/>
+                <rect x="62" y="128" width="62" height="10" rx="5" fill="#d9534f"/>
+                <line x1="124" y1="132" x2="134" y2="96" stroke="#d9534f" stroke-width="6" stroke-linecap="round"/>
+                <line x1="130" y1="96" x2="143" y2="92" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+                <path d="M128 138 Q140 124 152 134" stroke="#b3403d" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+                <!-- beruang -->
+                <ellipse cx="108" cy="131" rx="10" ry="6" fill="#8a5a33"/>
+                <ellipse cx="96" cy="108" rx="16" ry="20" fill="#a8703f"/>
+                <line x1="102" y1="100" x2="133" y2="96" stroke="#a8703f" stroke-width="9" stroke-linecap="round"/>
+                <circle cx="86" cy="62" r="7" fill="#8a5a33"/>
+                <circle cx="114" cy="62" r="7" fill="#8a5a33"/>
+                <circle cx="100" cy="78" r="18" fill="#a8703f"/>
+                <ellipse cx="109" cy="84" rx="8" ry="6" fill="#f3d7b0"/>
+                <circle cx="113" cy="82" r="2.5" fill="#3a2415"/>
+                <circle cx="96" cy="75" r="2.5" fill="#2b1d0e"/>
+                <circle cx="107" cy="75" r="2.5" fill="#2b1d0e"/>
+                <path d="M82 72 Q100 50 118 72 Z" fill="#f2c14e"/>
+              </g>
+
+              <!-- roda -->
+              <g class="kr-roda"><circle cx="60" cy="146" r="14" fill="#333"/><circle cx="60" cy="146" r="6" fill="#bbb"/><line x1="52" y1="146" x2="68" y2="146" stroke="#777" stroke-width="2"/><line x1="60" y1="138" x2="60" y2="154" stroke="#777" stroke-width="2"/></g>
+              <g class="kr-roda"><circle cx="140" cy="146" r="14" fill="#333"/><circle cx="140" cy="146" r="6" fill="#bbb"/><line x1="132" y1="146" x2="148" y2="146" stroke="#777" stroke-width="2"/><line x1="140" y1="138" x2="140" y2="154" stroke="#777" stroke-width="2"/></g>
+            </g>
+          </svg>
+        </div>`;
+    }
+
+    // ----- Kartu produk -----
+    function kartuProduk(p, unggulan) {
+      return `
+        <article class="product-card ${unggulan ? "featured" : ""}">
+          <div class="product-picture" style="background:${escapeHTML(p.c)}">${unggulan ? gambarMaskot() : "🍌"}</div>
+          <div class="product-content">
+            ${p.tag ? `<span class="product-label">${escapeHTML(p.tag)}</span>` : ""}
+            <h3>${escapeHTML(p.name)}</h3>
+            ${p.desc ? `<p class="product-desc">${escapeHTML(p.desc)}</p>` : ""}
+            ${unggulan && p.bahan ? `<p class="product-desc" style="min-height:0;margin-top:8px"><b>Bahan:</b> ${escapeHTML(p.bahan)}</p>` : ""}
+            <div class="price">${rupiah(p.price)} <small>/ bungkus</small></div>
+            <button class="btn btn-primary btn-block" data-a="tambah" data-id="${p.id}">+ Tambah ke Keranjang</button>
+            ${unggulan ? gambarDapur() : ""}
+          </div>
+        </article>`;
+    }
+
+    // ----- Beranda / Katalog -----
+    function halamanKatalog() {
+      if (!produkSiap) return '<div class="panel loading">Memuat produk...</div>';
+
+      const tunggal = PRODUK.length === 1;
+
+      const pilihan = pesananList.map(o =>
+        `<option value="${escapeHTML(o.uid)}" ${o.uid === aktifUid ? "selected" : ""}>${escapeHTML(namaPesanan(o))} (${jumlahBungkus(o)} bungkus)</option>`
+      ).join("");
+
+      return `
+        <section class="hero">
+          <small>CAMILAN TRADISIONAL</small>
+          <h2>Rasakan Nikmatnya Pisang Sale</h2>
+          <p>Pisang sale menjadi pilihan camilan tradisional yang cocok dinikmati saat bersantai bersama keluarga maupun teman.</p>
+        </section>
+
+        <div class="section-head">
+          <div>
+            <h2>${tunggal ? "Produk Andalan Kami" : "Produk Kami"}</h2>
+            <p>${tunggal ? "Satu produk, dibuat dengan sepenuh hati." : "Pilih ukuran kemasan sesuai kebutuhanmu."}</p>
+          </div>
+        </div>
+
+        <div class="order-bar">
+          <span>Tambahkan ke:</span>
+          <select data-a="pilih" aria-label="Pilih pesanan">${pilihan}</select>
+          <button class="btn btn-light" data-a="pesanan-baru">+ Pesanan Baru (pemesan lain)</button>
+        </div>
+
+        <div class="product-grid ${tunggal ? "single" : ""}">
+          ${PRODUK.map(p => kartuProduk(p, tunggal)).join("")}
+        </div>
+
+        <div class="section-head"><div><h2>Kenapa Pisang Sale Kita?</h2></div></div>
+        <div class="feature-grid">
+          <div class="feature"><div class="ic">🍌</div><h3>Pisang Pilihan</h3><p>Dibuat dari pisang matang pilihan dengan rasa manis alami.</p></div>
+          <div class="feature"><div class="ic">☀️</div><h3>Proses Tradisional</h3><p>Dijemur dan diolah secara tradisional, tanpa banyak campuran.</p></div>
+          <div class="feature"><div class="ic">🎁</div><h3>Cocok Jadi Oleh-oleh</h3><p>Praktis dibawa, enak untuk teman santai atau dibagi ke keluarga.</p></div>
+        </div>
+
+        <div class="section-head"><div><h2>Cara Pesan</h2></div></div>
+        <div class="panel steps">
+          <div class="step"><span>1</span><div><b>Pilih jumlah</b>Tambahkan pisang sale ke keranjang.</div></div>
+          <div class="step"><span>2</span><div><b>Isi data</b>Lengkapi nama, nomor WhatsApp, dan metode penerimaan.</div></div>
+          <div class="step"><span>3</span><div><b>Konfirmasi</b>Kami menghubungi kamu lewat WhatsApp.</div></div>
+        </div>`;
+    }
+
+    // ----- Keranjang (satu kotak per pesanan) -----
+    function halamanKeranjang() {
+      const kartu = pesananList.map((o, idx) => {
+        const aktif = o.uid === aktifUid;
+        const uid = escapeHTML(o.uid);
+
+        const baris = o.items.map(item => {
+          const p = cariProduk(item.id);
+          if (!p) return "";
+          return `
+            <div class="cart-row">
+              <div>
+                <h3>${escapeHTML(p.name)}</h3>
+                <p>${rupiah(p.price)} per bungkus</p>
+                <p><b>Subtotal: ${rupiah(p.price * item.qty)}</b></p>
+              </div>
+              <div class="qty-control">
+                <button data-a="kurang" data-uid="${uid}" data-id="${p.id}">−</button>
+                <b>${item.qty}</b>
+                <button data-a="tambah" data-uid="${uid}" data-id="${p.id}">+</button>
+                <button class="btn btn-danger" data-a="hapus" data-uid="${uid}" data-id="${p.id}">Hapus</button>
+              </div>
+            </div>`;
+        }).join("");
+
+        return `
+          <div class="panel order-panel ${aktif ? "aktif" : ""}">
+            <div class="order-head">
+              <input class="label-input" data-a="nama-pesanan" data-uid="${uid}" value="${escapeHTML(o.nama)}" maxlength="40" placeholder="Pesanan ${idx + 1}: ketik nama pemesan (opsional)" aria-label="Nama pesanan">
+              ${aktif
+                ? '<span class="badge-aktif">Sedang dipakai</span>'
+                : `<button class="btn btn-light" data-a="aktifkan" data-uid="${uid}">Pakai pesanan ini</button>`}
+            </div>
+
+            ${o.items.length ? baris : '<div class="order-empty">Belum ada produk di pesanan ini.</div>'}
+
+            ${o.items.length ? `<div class="total-row"><span>Total</span><span>${rupiah(hitungTotal(o))}</span></div>` : ""}
+
+            <div class="order-actions">
+              <button class="btn btn-primary" data-a="checkout" data-uid="${uid}" ${o.items.length ? "" : "disabled"}>Lanjut ke Pemesanan</button>
+              ${pesananList.length > 1 || o.items.length ? `<button class="btn btn-danger" data-a="hapus-pesanan" data-uid="${uid}">Hapus Pesanan</button>` : ""}
+            </div>
+          </div>`;
+      }).join("");
+
+      return `
+        <p class="order-note">Tiap pesanan dikirim sendiri-sendiri dan tidak tercampur. Produk baru hanya masuk ke pesanan yang bertanda <b>Sedang dipakai</b>. Mau menambah produk untuk pemesan yang sama? Pakai tombol + di dalam pesanannya.</p>
+        ${kartu}
+        <div class="order-actions">
+          <button class="btn btn-light" data-a="pesanan-baru">+ Pesanan Baru (pemesan lain)</button>
+          <button class="btn btn-light" data-a="katalog">Lihat Produk</button>
+        </div>`;
+    }
+
+    // ----- Formulir pemesanan -----
+    function halamanCheckout() {
+      const o = cariPesanan(checkoutUid);
+
+      if (!o || !o.items.length) {
+        return `
+          <div class="panel empty">
+            <h3>Belum ada pesanan yang dipilih</h3>
+            <p>Pilih pesanan yang mau dilanjutkan dari keranjang.</p>
+            <br>
+            <button class="btn btn-primary" data-a="keranjang">Buka Keranjang</button>
+          </div>`;
+      }
+
+      const ringkasan = o.items.map(item => {
+        const p = cariProduk(item.id);
+        if (!p) return "";
+        return `
+          <div class="cart-row">
+            <div>
+              <h3>${escapeHTML(p.name)}</h3>
+              <p>${item.qty} bungkus × ${rupiah(p.price)}</p>
+            </div>
+            <b>${rupiah(p.price * item.qty)}</b>
+          </div>`;
+      }).join("");
+
+      return `
+        <div class="panel">
+          <h2 style="margin-bottom:18px">Data Pemesan</h2>
+          <div class="notice">Kamu sedang mengisi data untuk <b>${escapeHTML(namaPesanan(o))}</b>. Pastikan data sudah benar agar penjual dapat menghubungi dan memproses pesanan.</div>
+
+          <form id="formPesanan">
+            <div class="form-grid">
+              <div class="field">
+                <label for="nama">Nama Lengkap</label>
+                <input id="nama" name="nama" autocomplete="off" required maxlength="100" value="${escapeHTML(o.nama)}" placeholder="Ketik nama lengkap kamu">
+              </div>
+              <div class="field">
+                <label for="hp">Nomor WhatsApp</label>
+                <input id="hp" name="hp" type="tel" inputmode="tel" autocomplete="off" required maxlength="20" placeholder="Ketik nomor WhatsApp kamu">
+              </div>
+              <div class="field full">
+                <label>Metode Penerimaan</label>
+                <div class="radio-box">
+                  <label class="radio-option"><input type="radio" name="metode" value="ambil" checked> Ambil Sendiri</label>
+                  <label class="radio-option"><input type="radio" name="metode" value="antar"> Diantar</label>
+                </div>
+              </div>
+              <div class="field full" id="alamatField" style="display:none">
+                <label for="alamat">Alamat Pengantaran</label>
+                <textarea id="alamat" name="alamat" placeholder="Masukkan alamat lengkap"></textarea>
+              </div>
+              <div class="field full">
+                <label for="catatan">Catatan Tambahan (Opsional)</label>
+                <textarea id="catatan" name="catatan" placeholder="Tambahkan catatan jika ada"></textarea>
+              </div>
+            </div>
+
+            <div class="section-head">
+              <div><h2>Ringkasan Pesanan</h2><p>Periksa kembali produk yang akan dipesan.</p></div>
+            </div>
+
+            ${ringkasan}
+
+            <div class="total-row"><span>Total Pembayaran</span><span>${rupiah(hitungTotal(o))}</span></div>
+            <div id="pesanError" class="error-text"></div>
+            <button class="btn btn-primary btn-block" id="btnKirim" type="submit">Buat Pesanan</button>
+          </form>
+        </div>`;
+    }
+
+    // ----- Pesanan berhasil (dengan animasi kurir) -----
+    function halamanSelesai() {
+      if (!pesananJadi) {
+        halaman = "katalog";
+        return halamanKatalog();
+      }
+      const sisa = pesananList.filter(o => o.items.length).length;
+      return `
+        <div class="panel success">
+          <div class="success-icon">✅</div>
+          <h2>Pesanan Berhasil Dibuat!</h2>
+          <p style="margin-bottom:12px"><b>Pesananmu segera diberikan.</b></p>
+          ${gambarKurir()}
+          <div class="order-code">Atas nama: ${escapeHTML(pesananJadi.nama)}</div>
+          <p>Terima kasih! Kami akan menghubungi kamu lewat WhatsApp di nomor <b>${escapeHTML(pesananJadi.hp)}</b> untuk konfirmasi pesanan.</p>
+          <div class="success-actions">
+            ${sisa ? `<button class="btn btn-primary" data-a="keranjang">Lihat Pesanan Lainnya (${sisa})</button>` : ""}
+            <button class="btn btn-light" data-a="selesai">Kembali ke Beranda</button>
+          </div>
+        </div>`;
+    }
+
+    /* =========================================================
+       7. MENGIRIM PESANAN KE DATABASE
+       Rekap & tanggal pesanan dicatat oleh database (tabel pesanan),
+       tidak ditampilkan di web.
+       ========================================================= */
+    function bacaForm() {
+      const data = new FormData($("formPesanan"));
+      return {
+        nama: String(data.get("nama") || "").trim(),
+        hp: String(data.get("hp") || "").trim(),
+        metode: data.get("metode") === "antar" ? "antar" : "ambil",
+        alamat: String(data.get("alamat") || "").trim(),
+        catatan: String(data.get("catatan") || "").trim()
+      };
+    }
+
+    async function buatPesanan(event) {
+      event.preventDefault();
+
+      const form = bacaForm();
+      const errorBox = $("pesanError");
+      const tombol = $("btnKirim");
+      errorBox.textContent = "";
+
+      const o = cariPesanan(checkoutUid);
+
+      // Pemeriksaan isian
+      if (!form.nama) { errorBox.textContent = "Nama lengkap wajib diisi."; return; }
+
+      const hpBersih = form.hp.replace(/[^\d+]/g, "");   // buang spasi dan tanda strip
+      if (!/^(\+?62|0)8\d{8,12}$/.test(hpBersih)) {
+        errorBox.textContent = "Nomor WhatsApp tidak valid. Contoh: 081234567890";
+        return;
+      }
+      form.hp = hpBersih;
+
+      if (form.metode === "antar" && !form.alamat) { errorBox.textContent = "Alamat pengantaran wajib diisi."; return; }
+      if (!o || !o.items.length) { errorBox.textContent = "Pesanan ini masih kosong."; return; }
+
+      const items = o.items.map(i => ({ id: Number(i.id), qty: Number(i.qty) }));
+
+      tombol.disabled = true;
+      tombol.textContent = "Menyimpan Pesanan...";
+
+      try {
+        const response = await fetch(API_PESAN, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...form, items })
+        });
+
+        let hasil;
+        try { hasil = await response.json(); }
+        catch (e) { throw new Error(`Jawaban dari ${API_PESAN} tidak terbaca. Periksa isi file pesan.php.`); }
+
+        if (!response.ok || !hasil.ok) throw new Error(hasil.pesan || "Pesanan gagal disimpan.");
+
+        pesananJadi = { nama: form.nama, hp: form.hp };
+
+        // Hanya pesanan ini yang dihapus. Pesanan pemesan lain tetap aman.
+        pesananList = pesananList.filter(x => x.uid !== o.uid);
+        if (!pesananList.length) pesananList = [pesananKosong()];
+        aktifUid = pesananList[0].uid;
+        checkoutUid = null;
+        simpanKeranjang();
+        bukaHalaman("selesai");
+
+      } catch (error) {
+        errorBox.textContent = error.message;
+        tombol.disabled = false;
+        tombol.textContent = "Buat Pesanan";
+      }
+    }
+
+    /* =========================================================
+       8. KLIK & ISIAN (semua aksi diatur di sini)
+       ========================================================= */
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (btn.dataset.page === "checkout") checkoutUid = aktifUid;  // menu Pemesanan = pesanan yang sedang dipakai
+        bukaHalaman(btn.dataset.page);
+      });
+    });
+
+    $("app").addEventListener("click", event => {
+      const tombol = event.target.closest("[data-a]");
+      if (!tombol) return;
+      const id = Number(tombol.dataset.id);
+      const uid = tombol.dataset.uid;   // kosong kalau tombol dari beranda (otomatis ke pesanan aktif)
+
+      switch (tombol.dataset.a) {
+        case "tambah":        tambahProduk(id, 1, uid); break;
+        case "kurang":        ubahJumlah(uid, id, -1); break;
+        case "hapus":         hapusProduk(uid, id); break;
+        case "pesanan-baru":  pesananBaru(); break;
+        case "hapus-pesanan": hapusPesanan(uid); break;
+        case "aktifkan":      aktifUid = uid; simpanKeranjang(); tampilkan(); tampilToast(namaPesanan(cariPesanan(uid)) + " sekarang dipakai."); break;
+        case "katalog":       bukaHalaman("katalog"); break;
+        case "keranjang":     bukaHalaman("keranjang"); break;
+        case "checkout":      checkoutUid = uid; bukaHalaman("checkout"); break;
+        case "selesai":       pesananJadi = null; bukaHalaman("katalog"); break;
+        case "retry":         muatProduk(); break;
+      }
+    });
+
+    $("app").addEventListener("change", event => {
+      const t = event.target;
+
+      // Ganti pesanan tujuan di beranda
+      if (t.dataset.a === "pilih") {
+        if (cariPesanan(t.value)) { aktifUid = t.value; simpanKeranjang(); tampilkan(); }
+        return;
+      }
+
+      // Beri nama pesanan di keranjang
+      if (t.dataset.a === "nama-pesanan") {
+        const o = cariPesanan(t.dataset.uid);
+        if (o) { o.nama = t.value.trim(); simpanKeranjang(); }
+        return;
+      }
+
+      // Tampilkan kolom alamat hanya kalau memilih "Diantar"
+      if (t.name !== "metode") return;
+      const antar = t.value === "antar";
+      $("alamatField").style.display = antar ? "block" : "none";
+      $("alamat").required = antar;
+    });
+
+    $("app").addEventListener("submit", event => {
+      if (event.target.id === "formPesanan") buatPesanan(event);
+    });
+
+    /* =========================================================
+       9. MULAI
+       ========================================================= */
+    muatKeranjang();
+    muatProduk();
+  </script>
+</body>
+</html>
